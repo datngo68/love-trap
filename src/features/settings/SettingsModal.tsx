@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Settings, User, Heart, Globe, X, Check, ChevronDown, Share2, Music } from 'lucide-react'
 import { useAppStore } from '../../store/useAppStore'
 import { encodeConfigToURL } from '../../utils/urlConfig'
+import { playBgm, pauseBgm } from '../../hooks/useAudio'
 
 export default function SettingsModal() {
   const { t, i18n } = useTranslation()
@@ -18,6 +19,12 @@ export default function SettingsModal() {
     // Update the browser URL without reloading
     const newUrl = encodeConfigToURL(localConfig)
     window.history.replaceState(null, '', newUrl)
+
+    if (localConfig.autoPlayMusic) {
+      playBgm()
+    } else {
+      pauseBgm()
+    }
 
     toggleSettings()
   }

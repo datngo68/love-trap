@@ -62,8 +62,20 @@ export function playBgm() {
 
   const { musicPlaying } = useAudioStore.getState()
   if (!musicPlaying) {
-    bgmHowl.play()
     useAudioStore.setState({ musicPlaying: true })
+    if (bgmHowl.state() === 'unloaded') {
+      bgmHowl.once('load', () => bgmHowl?.play())
+    } else {
+      bgmHowl.play()
+    }
+  }
+}
+
+export function pauseBgm() {
+  const { musicPlaying } = useAudioStore.getState()
+  if (musicPlaying) {
+    useAudioStore.setState({ musicPlaying: false })
+    bgmHowl?.pause()
   }
 }
 
