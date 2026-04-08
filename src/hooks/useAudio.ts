@@ -35,22 +35,22 @@ function getSfx(name: string): Howl | null {
       new Howl({ src: [url], volume: name === 'success' ? 0.6 : 0.4, preload: true }),
     )
   }
-  return sfxCache.get(name) || null
+  return sfxCache.get(name)!
 }
 
 export function playSfx(name: string, playbackRate: number = 1.0) {
-  const { sfxEnabled } = useAudioStore.getState()
-  if (!sfxEnabled) return
+  if (!useAudioStore.getState().sfxEnabled) return
+  
   const sfx = getSfx(name)
-  if (sfx) {
-    sfx.rate(playbackRate)
-    sfx.play()
-  }
+  if (!sfx) return
+
+  sfx.rate(playbackRate)
+  sfx.play()
 }
 
 let bgmHowl: Howl | null = null
 
-export function playBgm() {
+function getBgm(): Howl {
   if (!bgmHowl) {
     bgmHowl = new Howl({
       src: ['/sounds/bgm.mp3'],
@@ -59,46 +59,36 @@ export function playBgm() {
       html5: true, // Bypass CORS & XHR for huge BGM file
     })
   }
+  return bgmHowl
+}
 
-  const { musicPlaying } = useAudioStore.getState()
-  if (!musicPlaying) {
-    useAudioStore.setState({ musicPlaying: true })
-    if (bgmHowl.state() === 'unloaded') {
-      bgmHowl.once('load', () => bgmHowl?.play())
-    } else {
-      bgmHowl.play()
-    }
+export function playBgm() {
+  const bgm = getBgm()
+  
+  // ALWAYS update state directly, let Howler manage its own .playing() state
+  // Using an if (!musicPlaying) guard here breaks mobile HTML5 unlock mechanisms!
+  useAudioStore.setState({ musicPlaying: true })
+  
+  if (bgm.state() === 'unloaded') {
+    bgm.once('load', () => bgm.play())
+  } else if (!bgm.playing()) {
+    bgm.play()
   }
 }
 
 export function pauseBgm() {
-  const { musicPlaying } = useAudioStore.getState()
-  if (musicPlaying) {
-    useAudioStore.setState({ musicPlaying: false })
-    bgmHowl?.pause()
-  }
+  if (!useAudioStore.getState().musicPlaying) return
+
+  useAudioStore.setState({ musicPlaying: false })
+  bgmHowl?.pause()
 }
 
 export function useBackgroundMusic() {
   const { musicPlaying } = useAudioStore()
 
   const handleToggle = useCallback(() => {
-    if (!bgmHowl) {
-      bgmHowl = new Howl({
-        src: ['/sounds/bgm.mp3'],
-        loop: true,
-        volume: 0.3,
-        html5: true,
-      })
-    }
-
-    if (musicPlaying) {
-      bgmHowl.pause()
-      useAudioStore.setState({ musicPlaying: false })
-    } else {
-      bgmHowl.play()
-      useAudioStore.setState({ musicPlaying: true })
-    }
+    if (musicPlaying) pauseBgm()
+    else playBgm()
   }, [musicPlaying])
 
   return { musicPlaying, handleToggle }
