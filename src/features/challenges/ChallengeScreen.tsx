@@ -244,7 +244,7 @@ export default function ChallengeScreen() {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
           >
-            {engine.getAll().map((opt, i) => (
+            {engine.getAll().map((opt) => (
               <motion.button
                 key={opt.id}
                 className="p-4 bg-white/60 backdrop-blur-md rounded-2xl border border-slate-200 shadow-sm hover:border-rose-300 hover:shadow-md transition-all text-left flex flex-col justify-between h-24"
