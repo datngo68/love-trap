@@ -29,8 +29,6 @@ export default function QuestionScreen() {
   const rotate = useTransform(x, [-100, 100], [-15, 15])
 
   const dodgeNoButton = useCallback((e?: any) => {
-    // Secret Dev Trick: Giữ Shift để vô hiệu hóa né tránh
-    // Hoặc "fatigue mechanic": Né 5 lần thì đứng yên 1 lần cho người ta bắt
     if (e?.shiftKey || dodgeCount >= 5) {
       if (dodgeCount >= 5) setDodgeCount(0)
       return
@@ -38,17 +36,20 @@ export default function QuestionScreen() {
 
     setDodgeCount((prev) => prev + 1)
 
-    const maxX = window.innerWidth * 0.3
-    const maxY = window.innerHeight * 0.25
+    // Magnetic micro-interaction / Smaller dodge range
+    const maxX = 90
+    const maxY = 70
     const newX = (Math.random() - 0.5) * 2 * maxX
     const newY = (Math.random() - 0.5) * 2 * maxY
+    
+    // Add spring physics to movement
     x.set(newX)
     y.set(newY)
 
     const tip = tooltips[Math.floor(Math.random() * tooltips.length)]
     setTooltipText(tip)
     setShowTooltip(true)
-    setTimeout(() => setShowTooltip(false), 1200)
+    setTimeout(() => setShowTooltip(false), 1500)
   }, [x, y, tooltips, dodgeCount])
 
   const handleNo = useCallback(() => {
@@ -142,7 +143,9 @@ export default function QuestionScreen() {
           <motion.button
             ref={noButtonRef}
             id="btn-no"
-            className="btn-secondary px-8 py-3 text-base"
+            className={`btn-secondary px-8 py-3 text-base transition-all duration-300 ${
+              dodgeCount >= 5 ? 'bg-slate-200 text-slate-500 grayscale opacity-80' : ''
+            }`}
             style={{ x, y, rotate }}
             onHoverStart={dodgeNoButton}
             onTouchStart={dodgeNoButton}
@@ -151,17 +154,17 @@ export default function QuestionScreen() {
             aria-label={t('question.no')}
           >
             <ThumbsDown size={16} strokeWidth={2.2} />
-            {t('question.no')}
+            {dodgeCount >= 5 ? 'Thôi mệt quá, không né nữa...' : t('question.no')}
           </motion.button>
 
           {/* Tooltip */}
           {showTooltip && (
             <motion.div
-              className="absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap text-white text-sm px-3 py-1 rounded-lg pointer-events-none"
-              style={{ background: 'linear-gradient(135deg, #e11d48, #f43f5e)' }}
-              initial={{ opacity: 0, y: 5 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0 }}
+              className="absolute -top-12 left-1/2 -translate-x-1/2 whitespace-nowrap text-rose-900 font-medium text-sm px-4 py-2 rounded-xl pointer-events-none shadow-xl border border-white/50 backdrop-blur-md bg-white/80"
+              initial={{ opacity: 0, scale: 0.8, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              transition={{ type: 'spring', damping: 15, stiffness: 300 }}
             >
               {tooltipText}
             </motion.div>
@@ -169,16 +172,18 @@ export default function QuestionScreen() {
         </div>
       </div>
 
-      {/* Refusal counter */}
-      {session.refusalCount > 0 && (
-        <motion.p
-          className="mt-8 text-xs text-rose-300 font-medium"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-        >
-          Đã từ chối: {session.refusalCount} lần
-        </motion.p>
-      )}
+      {/* Graceful Exit */}
+      <motion.button
+        className="absolute bottom-8 text-slate-400 text-xs font-medium hover:text-slate-600 transition-colors"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 2 }}
+        onClick={() => {
+          alert('Chức năng thoát hiểm dành cho người chơi kiên định! (Tích hợp Lead Generation vào đây)')
+        }}
+      >
+        Thoát ra suy nghĩ thêm...
+      </motion.button>
     </motion.div>
   )
 }
