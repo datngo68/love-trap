@@ -23,6 +23,8 @@ const en = {
     ],
     yes: 'Yes, I do!',
     no: 'No',
+    maxDodgeTooltip: 'Challenge unlocked! Click to accept your punishment!',
+    maxDodgeButton: "Alright fine, I'm tired, catch me...",
     noTooltips: [
       'Are you sure?',
       'Try again...',
@@ -47,6 +49,8 @@ const en = {
       'Determined to say no, huh?',
       'You are only allowed to click YES!'
     ],
+    gracefulExitBtn: 'Take a break to think...',
+    gracefulExitAlert: 'Emergency exit for the very stubborn players!',
   },
   celebration: {
     title: 'Yaaaay!',

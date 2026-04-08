@@ -23,6 +23,8 @@ const vi = {
     ],
     yes: 'Có, {{receiver}} yêu!',
     no: 'Không',
+    maxDodgeTooltip: 'Thử thách đã mở khoá! Nhấp để nhận lấy hình phạt nào!',
+    maxDodgeButton: 'Thôi mệt rồi, nhường bé đó...',
     noTooltips: [
       'Chắc chưa?',
       'Bấm lại đi...',
@@ -48,6 +50,8 @@ const vi = {
       'Quyết tâm từ chối đến cùng sao?',
       'Chỉ được chọn chữ CÓ thôi nhé!'
     ],
+    gracefulExitBtn: 'Thoát ra suy nghĩ thêm...',
+    gracefulExitAlert: 'Chức năng thoát hiểm dành cho người chơi kiên định!',
   },
   celebration: {
     title: 'Yaaaay!',

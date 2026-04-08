@@ -43,7 +43,7 @@ export default function QuestionScreen() {
       // Khi đạt giới hạn (15 lần), nút trở về chính giữa và ĐỨNG YÊN
       x.set(0)
       y.set(0)
-      setTooltipText('Thử thách đã mở khoá! Click để nhận hình phạt nào 😈')
+      setTooltipText(t('question.maxDodgeTooltip'))
     } else {
       // Progressive scale: jumps further as user gets more frustrated
       const currentScale = Math.min(1 + dodgeCount * 0.15, 2.5)
@@ -178,9 +178,8 @@ export default function QuestionScreen() {
           <motion.button
             ref={noButtonRef}
             id="btn-no"
-            className={`btn-secondary px-8 py-3 text-base ${
-              dodgeCount >= 15 ? 'bg-slate-200 text-slate-500 grayscale opacity-80' : ''
-            }`}
+            className={`btn-secondary px-8 py-3 text-base ${dodgeCount >= 15 ? 'bg-slate-200 text-slate-500 grayscale opacity-80' : ''
+              }`}
             style={{ x, y, rotate }}
             onHoverStart={dodgeNoButton}
             onClick={handleNoClick}
@@ -188,7 +187,7 @@ export default function QuestionScreen() {
             aria-label={t('question.no')}
           >
             <ThumbsDown size={16} strokeWidth={2.2} />
-            {dodgeCount >= 15 ? 'Thôi nhường bé đó, yêu đi nè... 💖' : t('question.no')}
+            {dodgeCount >= 15 ? t('question.maxDodgeButton') : t('question.no')}
           </motion.button>
         </div>
       </div>
@@ -200,10 +199,10 @@ export default function QuestionScreen() {
         animate={{ opacity: 1 }}
         transition={{ delay: 2 }}
         onClick={() => {
-          alert('Chức năng thoát hiểm dành cho người chơi kiên định!')
+          alert(t('question.gracefulExitAlert'))
         }}
       >
-        Thoát ra suy nghĩ thêm...
+        {t('question.gracefulExitBtn')}
       </motion.button>
     </motion.div>
   )
