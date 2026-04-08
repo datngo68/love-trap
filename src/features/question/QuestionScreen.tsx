@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef } from 'react'
-import { motion, useMotionValue, useTransform, AnimatePresence } from 'framer-motion'
+import { motion, useMotionValue, useTransform, AnimatePresence, useSpring } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import { Heart, ThumbsDown } from 'lucide-react'
 import { useAppStore } from '../../store/useAppStore'
@@ -25,7 +25,9 @@ export default function QuestionScreen() {
 
   const x = useMotionValue(0)
   const y = useMotionValue(0)
-  const rotate = useTransform(x, [-100, 100], [-15, 15])
+  const springX = useSpring(x, { stiffness: 400, damping: 20 })
+  const springY = useSpring(y, { stiffness: 400, damping: 20 })
+  const rotate = useTransform(springX, [-100, 100], [-15, 15])
 
   const dodgeNoButton = useCallback((e?: any) => {
     if (e?.shiftKey || dodgeCount >= 15) {
@@ -131,7 +133,7 @@ export default function QuestionScreen() {
 
       {/* Visual Novel Chat Bubble */}
       <div className="h-24 mb-4 flex items-center justify-center w-full max-w-sm pointer-events-none">
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="popLayout">
           {tooltipText && (
             <motion.div
               key={tooltipText}
@@ -139,7 +141,7 @@ export default function QuestionScreen() {
               initial={{ opacity: 0, y: 15, scale: 0.9 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -15, scale: 0.95 }}
-              transition={{ type: 'spring', damping: 15, stiffness: 300 }}
+              transition={{ type: 'spring', damping: 20, stiffness: 400 }}
             >
               {/* Triangle pointing down */}
               <div
@@ -172,10 +174,10 @@ export default function QuestionScreen() {
           <motion.button
             ref={noButtonRef}
             id="btn-no"
-            className={`btn-secondary px-8 py-3 text-base transition-all duration-300 ${
-              dodgeCount >= 15 ? 'bg-slate-200 text-slate-500 grayscale opacity-80' : ''
+            className={`btn-secondary px-8 py-3 text-base ${
+              dodgeCount >= 15 ? 'bg-slate-200 text-slate-500 grayscale opacity-80 transition-colors duration-300' : ''
             }`}
-            style={{ x, y, rotate }}
+            style={{ x: springX, y: springY, rotate }}
             onHoverStart={dodgeNoButton}
             onClick={handleNoClick}
             whileTap={{ scale: 0.9 }}
