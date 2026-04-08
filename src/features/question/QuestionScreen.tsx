@@ -29,33 +29,39 @@ export default function QuestionScreen() {
 
   const dodgeNoButton = useCallback((e?: any) => {
     if (e?.shiftKey || dodgeCount >= 15) {
-      if (dodgeCount >= 15) setDodgeCount(0)
       return
     }
 
-    setDodgeCount((prev) => prev + 1)
+    const nextCount = dodgeCount + 1
+    setDodgeCount(nextCount)
 
-    // Play "fail" sound with increasing pitch!
+    // Play "fail" sound with increasing pitch
     const pitch = Math.min(2.0, 1.0 + dodgeCount * 0.08)
     playSfx('fail', pitch)
 
-    // Progressive scale: jumps further as user gets more frustrated
-    const currentScale = Math.min(1 + dodgeCount * 0.15, 2.5)
-    
-    const maxX = 120 * currentScale
-    const maxY = 90 * currentScale
-    const newX = (Math.random() - 0.5) * 2 * maxX
-    const newY = (Math.random() - 0.5) * 2 * maxY
-    x.set(newX)
-    y.set(newY)
+    if (nextCount >= 15) {
+      // Khi đạt giới hạn (15 lần), nút trở về chính giữa và ĐỨNG YÊN
+      x.set(0)
+      y.set(0)
+      setTooltipText('Thử thách đã mở khoá! Click để nhận hình phạt nào 😈')
+    } else {
+      // Progressive scale: jumps further as user gets more frustrated
+      const currentScale = Math.min(1 + dodgeCount * 0.15, 2.5)
+      const maxX = 120 * currentScale
+      const maxY = 90 * currentScale
+      const newX = (Math.random() - 0.5) * 2 * maxX
+      const newY = (Math.random() - 0.5) * 2 * maxY
+      x.set(newX)
+      y.set(newY)
 
-    const tip = tooltips[Math.floor(Math.random() * tooltips.length)]
-    setTooltipText(tip)
+      const tip = tooltips[Math.floor(Math.random() * tooltips.length)]
+      setTooltipText(tip)
+    }
   }, [x, y, tooltips, dodgeCount])
 
   const handleNoClick = useCallback((e: any) => {
     if (e?.shiftKey || dodgeCount >= 15) {
-      if (dodgeCount >= 15) setDodgeCount(0)
+      setDodgeCount(0)
       playSfx('click')
       recordRefusal()
       setScreen('challenge')
