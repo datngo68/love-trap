@@ -29,16 +29,18 @@ export default function QuestionScreen() {
   const rotate = useTransform(x, [-100, 100], [-15, 15])
 
   const dodgeNoButton = useCallback((e?: any) => {
-    if (e?.shiftKey || dodgeCount >= 5) {
-      if (dodgeCount >= 5) setDodgeCount(0)
+    if (e?.shiftKey || dodgeCount >= 15) {
+      if (dodgeCount >= 15) setDodgeCount(0)
       return
     }
 
     setDodgeCount((prev) => prev + 1)
 
-    // Smaller magnetic dodge
-    const maxX = 90
-    const maxY = 70
+    // Progressive scale: jumps further as user gets more frustrated
+    const currentScale = Math.min(1 + dodgeCount * 0.15, 2.5)
+    
+    const maxX = 120 * currentScale
+    const maxY = 90 * currentScale
     const newX = (Math.random() - 0.5) * 2 * maxX
     const newY = (Math.random() - 0.5) * 2 * maxY
     x.set(newX)
@@ -142,7 +144,7 @@ export default function QuestionScreen() {
             ref={noButtonRef}
             id="btn-no"
             className={`btn-secondary px-8 py-3 text-base transition-all duration-300 ${
-              dodgeCount >= 5 ? 'bg-slate-200 text-slate-500 grayscale opacity-80' : ''
+              dodgeCount >= 15 ? 'bg-slate-200 text-slate-500 grayscale opacity-80' : ''
             }`}
             style={{ x, y, rotate }}
             onHoverStart={dodgeNoButton}
@@ -152,7 +154,7 @@ export default function QuestionScreen() {
             aria-label={t('question.no')}
           >
             <ThumbsDown size={16} strokeWidth={2.2} />
-            {dodgeCount >= 5 ? 'Thôi mệt quá, không né nữa...' : t('question.no')}
+            {dodgeCount >= 15 ? 'Thôi quá đủ rồi, cho bắt đó...' : t('question.no')}
           </motion.button>
         </div>
       </div>
