@@ -52,11 +52,30 @@ export function createChallengeEngine() {
     return candidate
   }
 
+  function getOptions(n: number): ChallengeDefinition[] {
+    if (pool.length < n) refillPool()
+    const opts: ChallengeDefinition[] = []
+    const cPool = [...pool]
+    for (let i = 0; i < Math.min(n, cPool.length); i++) {
+      opts.push(cPool[i])
+    }
+    return opts
+  }
+
+  function commitOption(challengeId: string) {
+    usedInRound.add(challengeId)
+    pool = pool.filter((c) => c.id !== challengeId)
+  }
+
   function getTotalCount(): number {
     return allChallenges.length
   }
 
-  return { getNext, getTotalCount, refillPool }
+  function getAll(): ChallengeDefinition[] {
+    return allChallenges
+  }
+
+  return { getNext, getOptions, commitOption, getTotalCount, getAll, refillPool }
 }
 
 export type ChallengeEngine = ReturnType<typeof createChallengeEngine>
