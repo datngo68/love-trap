@@ -10,12 +10,18 @@ interface ShareableConfig {
 export function encodeConfigToURL(config: UserConfig): string {
   const url = new URL(window.location.href)
   url.hash = '' // Clear old hash method if exists
+  
+  // Format: sender|receiver|lang|theme
+  const rawString = `${config.senderName}|${config.receiverName}|${config.language}|${config.themeColor}`
+  
+  // Create UTF-8 friendly base64, then make it URL-safe (replace + /, remove =)
+  let encoded = btoa(unescape(encodeURIComponent(rawString)))
+  encoded = encoded.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
+
   const params = new URLSearchParams()
-  params.set('s', config.senderName)
-  params.set('r', config.receiverName)
-  params.set('l', config.language)
-  params.set('t', config.themeColor)
+  params.set('id', encoded)
   url.search = params.toString()
+  
   return url.toString()
 }
 
@@ -23,40 +29,49 @@ export function decodeConfigFromURL(): Partial<UserConfig> | null {
   try {
     const params = new URLSearchParams(window.location.search)
     
-    // Support legacy base64 hash backward compatibility
-    const hash = window.location.hash.slice(1)
-    if (hash && hash.startsWith('config=')) {
-      const json = decodeURIComponent(escape(atob(hash.replace('config=', ''))))
-      const data = JSON.parse(json) as ShareableConfig
-      return {
-        senderName: data.s,
-        receiverName: data.r,
-        language: data.l as 'vi' | 'en',
-        themeColor: data.t
+    // 1. Newest Format: ?id=ShortBase64
+    if (params.has('id')) {
+      let encoded = params.get('id')!
+      encoded = encoded.replace(/-/g, '+').replace(/_/g, '/')
+      const decodedString = decodeURIComponent(escape(atob(encoded)))
+      const [sender, receiver, language, theme] = decodedString.split('|')
+      if (sender && receiver) {
+        return {
+          senderName: sender,
+          receiverName: receiver,
+          language: language === 'en' ? 'en' : 'vi',
+          themeColor: theme || '#e11d48'
+        }
       }
-    } else if (hash && !hash.includes('=')) {
-      const json = decodeURIComponent(escape(atob(hash)))
+    }
+
+    // 2. Intermediate Format: ?s=Sender&r=Receiver
+    if (params.has('s') && params.has('r')) {
+      const config: Partial<UserConfig> = {
+        senderName: params.get('s')!,
+        receiverName: params.get('r')!
+      }
+      const lang = params.get('l')
+      if (lang === 'vi' || lang === 'en') config.language = lang
+      if (params.get('t')) config.themeColor = params.get('t')!
+      return config
+    }
+
+    // 3. Legacy Format: #config=eyJ...
+    const hash = window.location.hash.slice(1)
+    if (hash) {
+      const cleanHash = hash.startsWith('config=') ? hash.replace('config=', '') : hash
+      const json = decodeURIComponent(escape(atob(cleanHash)))
       const data = JSON.parse(json) as ShareableConfig
       return {
         senderName: data.s,
         receiverName: data.r,
-        language: data.l as 'vi' | 'en',
+        language: data.l === 'en' ? 'en' : 'vi',
         themeColor: data.t
       }
     }
 
-    if (!params.has('s') && !params.has('r')) return null
-
-    const config: Partial<UserConfig> = {}
-    if (params.get('s')) config.senderName = params.get('s')!
-    if (params.get('r')) config.receiverName = params.get('r')!
-    
-    const lang = params.get('l')
-    if (lang === 'vi' || lang === 'en') config.language = lang
-    
-    if (params.get('t')) config.themeColor = params.get('t')!
-
-    return config
+    return null
   } catch {
     return null
   }
