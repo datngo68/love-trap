@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef } from 'react'
-import { motion, useMotionValue, useTransform, AnimatePresence, useSpring } from 'framer-motion'
+import { motion, useMotionValue, useTransform, AnimatePresence } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import { Heart, ThumbsDown } from 'lucide-react'
 import { useAppStore } from '../../store/useAppStore'
@@ -25,10 +25,7 @@ export default function QuestionScreen() {
 
   const x = useMotionValue(0)
   const y = useMotionValue(0)
-  // High stiffness and low damping for a very fast, mischievous bounce
-  const springX = useSpring(x, { stiffness: 1500, damping: 14 })
-  const springY = useSpring(y, { stiffness: 1500, damping: 14 })
-  const rotate = useTransform(springX, [-100, 100], [-15, 15])
+  const rotate = useTransform(x, [-100, 100], [-15, 15])
 
   const dodgeNoButton = useCallback((e?: any) => {
     if (e?.shiftKey || dodgeCount >= 15) {
@@ -176,9 +173,9 @@ export default function QuestionScreen() {
             ref={noButtonRef}
             id="btn-no"
             className={`btn-secondary px-8 py-3 text-base ${
-              dodgeCount >= 15 ? 'bg-slate-200 text-slate-500 grayscale opacity-80 transition-colors duration-300' : ''
+              dodgeCount >= 15 ? 'bg-slate-200 text-slate-500 grayscale opacity-80' : ''
             }`}
-            style={{ x: springX, y: springY, rotate }}
+            style={{ x, y, rotate }}
             onHoverStart={dodgeNoButton}
             onClick={handleNoClick}
             whileTap={{ scale: 0.9 }}
