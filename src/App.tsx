@@ -94,6 +94,7 @@ function AudioControls() {
 
 export default function App() {
   const screen = useAppStore((s) => s.screen)
+  const config = useAppStore((s) => s.config)
   const updateConfig = useAppStore((s) => s.updateConfig)
   const { i18n } = useTranslation()
 
@@ -107,6 +108,16 @@ export default function App() {
       }
     }
   }, [updateConfig, i18n])
+
+  // Dynamically update document title based on config and translation
+  useEffect(() => {
+    const appTitle = i18n.t('splash.appTitle', { 
+      receiver: config.receiverName, 
+      sender: config.senderName,
+      defaultValue: 'Em Có Yêu Anh Không?'
+    })
+    document.title = appTitle
+  }, [config.receiverName, config.senderName, i18n.language])
 
   // Register service worker
   useEffect(() => {

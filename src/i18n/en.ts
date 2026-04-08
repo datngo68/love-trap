@@ -1,5 +1,6 @@
 const en = {
   splash: {
+    appTitle: 'Does {{receiver}} Love {{sender}}?',
     greeting: 'Hello, {{receiver}}!',
     subtitle: 'There is a question for you...',
     start: 'Start',

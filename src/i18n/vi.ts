@@ -1,5 +1,6 @@
 const vi = {
   splash: {
+    appTitle: '{{receiver}} Có Yêu {{sender}} Không?',
     greeting: 'Xin chào, {{receiver}}!',
     subtitle: 'Có một câu hỏi dành cho bạn...',
     start: 'Bắt đầu',

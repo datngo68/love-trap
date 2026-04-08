@@ -89,7 +89,7 @@ export default function SplashScreen() {
             WebkitTextFillColor: 'transparent',
           }}
         >
-          Em Có Yêu Anh Không?
+          {t('splash.appTitle', { receiver: config.receiverName, sender: config.senderName })}
         </h1>
 
         {/* Greeting */}
