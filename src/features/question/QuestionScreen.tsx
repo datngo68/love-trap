@@ -9,7 +9,6 @@ export default function QuestionScreen() {
   const { t } = useTranslation()
   const { session, config, setScreen, recordRefusal } = useAppStore()
   const [tooltipText, setTooltipText] = useState('')
-  const [showTooltip, setShowTooltip] = useState(false)
   const [dodgeCount, setDodgeCount] = useState(0)
   const noButtonRef = useRef<HTMLButtonElement>(null)
 
@@ -52,8 +51,6 @@ export default function QuestionScreen() {
 
     const tip = tooltips[Math.floor(Math.random() * tooltips.length)]
     setTooltipText(tip)
-    setShowTooltip(true)
-    setTimeout(() => setShowTooltip(false), 2500)
   }, [x, y, tooltips, dodgeCount])
 
   const handleNoClick = useCallback((e: any) => {
@@ -132,6 +129,29 @@ export default function QuestionScreen() {
         {questionText}
       </motion.h1>
 
+      {/* Visual Novel Chat Bubble */}
+      <div className="h-24 mb-4 flex items-center justify-center w-full max-w-sm pointer-events-none">
+        <AnimatePresence mode="wait">
+          {tooltipText && (
+            <motion.div
+              key={tooltipText}
+              className="relative text-rose-800 font-bold text-base md:text-lg px-6 py-4 rounded-xl shadow-[0_4px_20px_rgba(225,29,72,0.1)] border border-white/60 bg-white/80 backdrop-blur-md"
+              initial={{ opacity: 0, y: 15, scale: 0.9 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -15, scale: 0.95 }}
+              transition={{ type: 'spring', damping: 15, stiffness: 300 }}
+            >
+              {/* Triangle pointing down */}
+              <div
+                className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white/80 border-b border-r border-white/60 rotate-45"
+                style={{ backdropFilter: 'blur(12px)' }}
+              />
+              <span style={{ fontFamily: 'var(--font-sans)' }}>{tooltipText}</span>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
       {/* Buttons container */}
       <div className="flex flex-col gap-5 items-center w-full max-w-xs relative">
         {/* YES button — big and inviting */}
@@ -162,25 +182,10 @@ export default function QuestionScreen() {
             aria-label={t('question.no')}
           >
             <ThumbsDown size={16} strokeWidth={2.2} />
-            {dodgeCount >= 15 ? 'Thôi quá đủ rồi, cho bắt đó...' : t('question.no')}
+            {dodgeCount >= 15 ? 'Thôi nhường bé đó, yêu đi nè... 💖' : t('question.no')}
           </motion.button>
         </div>
       </div>
-
-      {/* Central Floating Toast Tooltip */}
-      <AnimatePresence>
-        {showTooltip && (
-          <motion.div
-            className="fixed top-1/4 left-1/2 -translate-x-1/2 whitespace-nowrap text-rose-900 font-bold text-lg md:text-xl px-8 py-4 rounded-2xl pointer-events-none shadow-[0_10px_40px_rgba(225,29,72,0.15)] border border-white/60 backdrop-blur-xl bg-white/80 z-50"
-            initial={{ opacity: 0, scale: 0.5, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.8, y: -20 }}
-            transition={{ type: 'spring', damping: 12, stiffness: 200 }}
-          >
-            {tooltipText}
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       {/* Graceful Exit */}
       <motion.button
