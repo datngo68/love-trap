@@ -1,4 +1,4 @@
-import { useRef, useCallback } from 'react'
+import { useCallback } from 'react'
 import { Howl } from 'howler'
 import { create } from 'zustand'
 
@@ -48,27 +48,46 @@ export function playSfx(name: string, playbackRate: number = 1.0) {
   }
 }
 
+let bgmHowl: Howl | null = null
+
+export function playBgm() {
+  if (!bgmHowl) {
+    bgmHowl = new Howl({
+      src: ['/sounds/bgm.mp3'],
+      loop: true,
+      volume: 0.3,
+      html5: true, // Bypass CORS & XHR for huge BGM file
+    })
+  }
+
+  const { musicPlaying } = useAudioStore.getState()
+  if (!musicPlaying) {
+    bgmHowl.play()
+    useAudioStore.setState({ musicPlaying: true })
+  }
+}
+
 export function useBackgroundMusic() {
-  const musicRef = useRef<Howl | null>(null)
-  const { musicPlaying, toggleMusic } = useAudioStore()
+  const { musicPlaying } = useAudioStore()
 
   const handleToggle = useCallback(() => {
-    if (!musicRef.current) {
-      musicRef.current = new Howl({
+    if (!bgmHowl) {
+      bgmHowl = new Howl({
         src: ['/sounds/bgm.mp3'],
         loop: true,
         volume: 0.3,
-        html5: true, // Bypass CORS & XHR for huge BGM file
+        html5: true,
       })
     }
 
     if (musicPlaying) {
-      musicRef.current.pause()
+      bgmHowl.pause()
+      useAudioStore.setState({ musicPlaying: false })
     } else {
-      musicRef.current.play()
+      bgmHowl.play()
+      useAudioStore.setState({ musicPlaying: true })
     }
-    toggleMusic()
-  }, [musicPlaying, toggleMusic])
+  }, [musicPlaying])
 
   return { musicPlaying, handleToggle }
 }

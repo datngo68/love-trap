@@ -2,6 +2,7 @@ import { motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import { Heart, Mail } from 'lucide-react'
 import { useAppStore } from '../../store/useAppStore'
+import { playBgm } from '../../hooks/useAudio'
 
 const HEART_POSITIONS = [
   { left: '8%', top: '12%', size: 'text-lg', delay: 0 },
@@ -117,7 +118,12 @@ export default function SplashScreen() {
           className="btn-primary"
           whileHover={{ scale: 1.06 }}
           whileTap={{ scale: 0.95 }}
-          onClick={() => setScreen('question')}
+          onClick={() => {
+            if (config.autoPlayMusic) {
+              playBgm()
+            }
+            setScreen('question')
+          }}
           aria-label={t('splash.start')}
         >
           <Mail size={20} strokeWidth={2.2} />

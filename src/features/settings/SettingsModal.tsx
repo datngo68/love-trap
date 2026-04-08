@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
-import { Settings, User, Heart, Globe, X, Check, ChevronDown, Share2 } from 'lucide-react'
+import { Settings, User, Heart, Globe, X, Check, ChevronDown, Share2, Music } from 'lucide-react'
 import { useAppStore } from '../../store/useAppStore'
 import { encodeConfigToURL } from '../../utils/urlConfig'
 
@@ -173,6 +173,28 @@ export default function SettingsModal() {
                   <div className="absolute inset-y-0 right-4 flex items-center pointer-events-none">
                     <ChevronDown size={18} className="text-rose-400" />
                   </div>
+                </div>
+              </div>
+              {/* Autoplay Music Toggle */}
+              <div
+                className="flex items-center justify-between p-4 rounded-xl border-2 border-rose-200 cursor-pointer"
+                style={{ background: 'rgba(255,241,242,0.6)' }}
+                onClick={() => setLocalConfig(c => ({ ...c, autoPlayMusic: !c.autoPlayMusic }))}
+              >
+                <div className="flex items-center gap-2 text-rose-700 font-semibold text-sm">
+                  <Music size={16} className="text-rose-400" />
+                  Tự động phát nhạc nền
+                </div>
+                
+                {/* Custom Toggle Switch */}
+                <div 
+                  className={`w-12 h-6 rounded-full p-1 transition-colors duration-300 ease-in-out flex items-center ${localConfig.autoPlayMusic ? 'bg-rose-500' : 'bg-rose-200'}`}
+                >
+                  <motion.div 
+                    className="w-4 h-4 bg-white rounded-full shadow-sm"
+                    animate={{ x: localConfig.autoPlayMusic ? 24 : 0 }}
+                    transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                  />
                 </div>
               </div>
             </div>

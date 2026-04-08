@@ -5,6 +5,7 @@ export interface UserConfig {
   receiverName: string
   themeColor: string
   language: 'vi' | 'en'
+  autoPlayMusic: boolean
 }
 
 export type ChallengeCategory = 'quiz' | 'click' | 'text' | 'minigame' | 'truthdare'

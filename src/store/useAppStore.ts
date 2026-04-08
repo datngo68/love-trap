@@ -23,6 +23,7 @@ const defaultConfig: UserConfig = {
   receiverName: 'Em',
   themeColor: '#e11d48',
   language: 'vi',
+  autoPlayMusic: false,
 }
 
 const defaultSession: SessionState = {

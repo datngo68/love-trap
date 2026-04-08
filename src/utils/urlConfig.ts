@@ -11,8 +11,8 @@ export function encodeConfigToURL(config: UserConfig): string {
   const url = new URL(window.location.href)
   url.hash = '' // Clear old hash method if exists
   
-  // Format: sender|receiver|lang|theme
-  const rawString = `${config.senderName}|${config.receiverName}|${config.language}|${config.themeColor}`
+  // Format: sender|receiver|lang|theme|autoPlayMusic
+  const rawString = `${config.senderName}|${config.receiverName}|${config.language}|${config.themeColor}|${config.autoPlayMusic ? '1' : '0'}`
   
   // Create UTF-8 friendly base64, then make it URL-safe (replace + /, remove =)
   let encoded = btoa(unescape(encodeURIComponent(rawString)))
@@ -34,13 +34,14 @@ export function decodeConfigFromURL(): Partial<UserConfig> | null {
       let encoded = params.get('id')!
       encoded = encoded.replace(/-/g, '+').replace(/_/g, '/')
       const decodedString = decodeURIComponent(escape(atob(encoded)))
-      const [sender, receiver, language, theme] = decodedString.split('|')
+      const [sender, receiver, language, theme, autoPlay] = decodedString.split('|')
       if (sender && receiver) {
         return {
           senderName: sender,
           receiverName: receiver,
           language: language === 'en' ? 'en' : 'vi',
-          themeColor: theme || '#e11d48'
+          themeColor: theme || '#e11d48',
+          autoPlayMusic: autoPlay === '1',
         }
       }
     }
@@ -90,6 +91,7 @@ export function importConfigJSON(json: string): UserConfig | null {
       receiverName: parsed.receiverName,
       themeColor: parsed.themeColor || '#e11d48',
       language: parsed.language === 'en' ? 'en' : 'vi',
+      autoPlayMusic: !!parsed.autoPlayMusic,
     }
   } catch {
     return null
