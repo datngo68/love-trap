@@ -1,0 +1,60 @@
+const vi = {
+  splash: {
+    greeting: 'Xin chào, {{name}}!',
+    subtitle: 'Có một câu hỏi dành cho bạn...',
+    start: 'Bắt đầu',
+    from: 'Từ {{sender}} 💕',
+  },
+  question: {
+    variants: [
+      'Em có yêu anh không? 💕',
+      'Thật sự mà, em có yêu anh không? 🥺',
+      'Cho anh cơ hội trả lời lại nè... Em yêu anh chứ? 💗',
+      'Sao vẫn bấm KHÔNG hả? Em yêu anh mà đúng không? 😤',
+      'Anh hỏi lại lần nữa nha... Em yêu anh không? 🌹',
+      'Nè nè, suy nghĩ kỹ đi... Em yêu anh phải không? 💖',
+      'Oke chill... nhưng em có yêu anh không thật? 😏',
+      'Lần này trả lời thật nha! Em có yêu anh không? 💝',
+      'Anh sẽ hỏi đến khi nào em nói CÓ... Em yêu anh không? 🔥',
+      'Câu hỏi cuối cùng (hoặc không)... Em có yêu anh không? 💘',
+      'Thôi đi mà, nói CÓ đi... 🥹',
+      'Anh biết câu trả lời rồi, chỉ cần em nói thôi! 😍',
+    ],
+    yes: 'Có! 💕',
+    no: 'Không 😤',
+    noTooltips: [
+      'Chắc chưa?',
+      'Bấm lại đi...',
+      'Sai rồi!',
+      'Thử lại nha!',
+      'Hmm... suy nghĩ lại?',
+      'Nút này hư rồi 😅',
+    ],
+  },
+  celebration: {
+    title: 'Yaaaay! 🎉💕',
+    message: 'Anh biết mà! {{name}} yêu anh! 💖',
+    subtitle: 'Cảm ơn em đã nói CÓ!',
+    share: 'Chia sẻ',
+    playAgain: 'Chơi lại',
+    musicOn: 'Bật nhạc 🎵',
+    musicOff: 'Tắt nhạc 🔇',
+  },
+  challenge: {
+    title: 'Thử thách #{{num}}',
+    skip: 'Bỏ qua',
+    complete: 'Hoàn thành!',
+    timeLeft: 'Còn {{seconds}}s',
+    tryAgain: 'Về trả lời lại',
+  },
+  settings: {
+    title: 'Cài đặt',
+    receiverName: 'Tên người nhận',
+    senderName: 'Tên người gửi',
+    language: 'Ngôn ngữ',
+    save: 'Lưu',
+    close: 'Đóng',
+  },
+} as const
+
+export default vi

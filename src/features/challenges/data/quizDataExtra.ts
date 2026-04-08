@@ -1,0 +1,105 @@
+import type { ChallengeDefinition } from '../../../types'
+import type { QuizConfig } from './quizData'
+
+export const quizChallengesExtra: ChallengeDefinition[] = [
+  {
+    id: 'quiz-famous-couple',
+    category: 'quiz',
+    difficulty: 'medium',
+    titleKey: 'Cặp đôi nổi tiếng',
+    descriptionKey: 'Bạn biết bao nhiêu cặp đôi huyền thoại?',
+    timeLimitSeconds: 12,
+    config: {
+      question: 'Romeo yêu ai?',
+      questionEn: 'Who did Romeo love?',
+      options: [
+        { text: 'Rapunzel', textEn: 'Rapunzel', isCorrect: false },
+        { text: 'Juliet', textEn: 'Juliet', isCorrect: true },
+        { text: 'Cinderella', textEn: 'Cinderella', isCorrect: false },
+        { text: 'Elsa', textEn: 'Elsa', isCorrect: false },
+      ],
+      explanation: 'Romeo & Juliet — tình yêu bất diệt! 🌹',
+      explanationEn: 'Romeo & Juliet — eternal love! 🌹',
+    } satisfies QuizConfig,
+  },
+  {
+    id: 'quiz-love-math',
+    category: 'quiz',
+    difficulty: 'easy',
+    titleKey: 'Toán tình yêu',
+    descriptionKey: 'Phép tính nào đúng?',
+    timeLimitSeconds: 10,
+    config: {
+      question: '1 + 1 = ?  (trong tình yêu)',
+      questionEn: '1 + 1 = ?  (in love)',
+      options: [
+        { text: '2', textEn: '2', isCorrect: false },
+        { text: '3 (có thêm baby)', textEn: '3 (plus a baby)', isCorrect: false },
+        { text: '1 (vì hai ta là một)', textEn: '1 (because we are one)', isCorrect: true },
+        { text: '11', textEn: '11', isCorrect: false },
+      ],
+      explanation: 'Trong tình yêu, 1+1 = 1 vì hai ta là một! 💕',
+      explanationEn: 'In love, 1+1 = 1 because we are one! 💕',
+    } satisfies QuizConfig,
+  },
+  {
+    id: 'quiz-romcom',
+    category: 'quiz',
+    difficulty: 'medium',
+    titleKey: 'Phim tình cảm',
+    descriptionKey: 'Bạn là fan phim lãng mạn?',
+    timeLimitSeconds: 12,
+    config: {
+      question: 'Phim "Titanic" ra mắt năm nào?',
+      questionEn: 'When was "Titanic" released?',
+      options: [
+        { text: '1995', textEn: '1995', isCorrect: false },
+        { text: '1997', textEn: '1997', isCorrect: true },
+        { text: '1999', textEn: '1999', isCorrect: false },
+        { text: '2001', textEn: '2001', isCorrect: false },
+      ],
+      explanation: 'Titanic ra mắt năm 1997 — "I\'m the king of the world!" 🚢',
+      explanationEn: 'Titanic was released in 1997 — "I\'m the king of the world!" 🚢',
+    } satisfies QuizConfig,
+  },
+  {
+    id: 'quiz-body-language',
+    category: 'quiz',
+    difficulty: 'medium',
+    titleKey: 'Ngôn ngữ cơ thể',
+    descriptionKey: 'Đọc dấu hiệu tình yêu!',
+    timeLimitSeconds: 12,
+    config: {
+      question: 'Khi ai đó thích bạn, đồng tử mắt họ sẽ...?',
+      questionEn: 'When someone likes you, their pupils will...?',
+      options: [
+        { text: 'Co lại', textEn: 'Contract', isCorrect: false },
+        { text: 'Giãn ra', textEn: 'Dilate', isCorrect: true },
+        { text: 'Không đổi', textEn: 'Stay the same', isCorrect: false },
+        { text: 'Nhấp nháy', textEn: 'Flash', isCorrect: false },
+      ],
+      explanation: 'Đồng tử giãn ra khi nhìn thấy người mình yêu! 👀💕',
+      explanationEn: 'Pupils dilate when seeing someone you love! 👀💕',
+    } satisfies QuizConfig,
+  },
+  {
+    id: 'quiz-love-fact',
+    category: 'quiz',
+    difficulty: 'hard',
+    titleKey: 'Sự thật về tình yêu',
+    descriptionKey: 'Kiến thức thú vị!',
+    timeLimitSeconds: 15,
+    config: {
+      question: 'Trung bình, một người sẽ yêu bao nhiêu lần trong đời?',
+      questionEn: 'On average, how many times does a person fall in love?',
+      options: [
+        { text: '1 lần', textEn: '1 time', isCorrect: false },
+        { text: '3 lần', textEn: '3 times', isCorrect: true },
+        { text: '7 lần', textEn: '7 times', isCorrect: false },
+        { text: '10 lần', textEn: '10 times', isCorrect: false },
+      ],
+      explanation: 'Nghiên cứu cho thấy trung bình 3 lần — nhưng lần cuối là đẹp nhất! 💖',
+      explanationEn: 'Studies show 3 times on average — but the last one is the best! 💖',
+    } satisfies QuizConfig,
+  },
+]
