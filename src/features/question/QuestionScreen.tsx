@@ -10,6 +10,7 @@ export default function QuestionScreen() {
   const { session, setScreen, recordRefusal } = useAppStore()
   const [tooltipText, setTooltipText] = useState('')
   const [showTooltip, setShowTooltip] = useState(false)
+  const [dodgeCount, setDodgeCount] = useState(0)
   const noButtonRef = useRef<HTMLButtonElement>(null)
 
   const variantIndex = session.refusalCount % 12
@@ -27,7 +28,16 @@ export default function QuestionScreen() {
   const y = useMotionValue(0)
   const rotate = useTransform(x, [-100, 100], [-15, 15])
 
-  const dodgeNoButton = useCallback(() => {
+  const dodgeNoButton = useCallback((e?: any) => {
+    // Secret Dev Trick: Giữ Shift để vô hiệu hóa né tránh
+    // Hoặc "fatigue mechanic": Né 5 lần thì đứng yên 1 lần cho người ta bắt
+    if (e?.shiftKey || dodgeCount >= 5) {
+      if (dodgeCount >= 5) setDodgeCount(0)
+      return
+    }
+
+    setDodgeCount((prev) => prev + 1)
+
     const maxX = window.innerWidth * 0.3
     const maxY = window.innerHeight * 0.25
     const newX = (Math.random() - 0.5) * 2 * maxX
@@ -39,7 +49,7 @@ export default function QuestionScreen() {
     setTooltipText(tip)
     setShowTooltip(true)
     setTimeout(() => setShowTooltip(false), 1200)
-  }, [x, y, tooltips])
+  }, [x, y, tooltips, dodgeCount])
 
   const handleNo = useCallback(() => {
     playSfx('click')
