@@ -59,19 +59,21 @@ export default function SettingsModal() {
             onClick={toggleSettings}
           />
 
-          {/* Modal */}
-          <motion.div
-            className="fixed inset-x-4 top-1/2 -translate-y-1/2 z-50 mx-auto max-w-md max-h-[85dvh] overflow-y-auto overflow-x-hidden rounded-3xl p-6"
-            style={{
-              background: 'linear-gradient(180deg, #ffffff, #fff5f6)',
-              boxShadow: '0 20px 60px rgba(225, 29, 72, 0.15), 0 4px 16px rgba(0,0,0,0.08)',
-            }}
-            initial={{ opacity: 0, scale: 0.9, y: '-45%' }}
-            animate={{ opacity: 1, scale: 1, y: '-50%' }}
-            exit={{ opacity: 0, scale: 0.9, y: '-45%' }}
-            transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-          >
-            {/* Header */}
+          {/* Modal Container */}
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 pointer-events-none">
+            {/* Modal */}
+            <motion.div
+              className="relative w-full max-w-md max-h-[90dvh] overflow-y-auto overflow-x-hidden rounded-3xl p-6 pointer-events-auto"
+              style={{
+                background: 'linear-gradient(180deg, #ffffff, #fff5f6)',
+                boxShadow: '0 20px 60px rgba(225, 29, 72, 0.15), 0 4px 16px rgba(0,0,0,0.08)',
+              }}
+              initial={{ opacity: 0, scale: 0.95, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 10 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+            >
+              {/* Header */}
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-2.5">
                 <div
@@ -213,6 +215,7 @@ export default function SettingsModal() {
               </motion.button>
             </div>
           </motion.div>
+          </div>
         </>
       )}
     </AnimatePresence>
