@@ -61,7 +61,7 @@ export default function SettingsModal() {
 
           {/* Modal */}
           <motion.div
-            className="fixed inset-x-4 top-1/2 -translate-y-1/2 z-50 mx-auto max-w-md rounded-3xl p-6"
+            className="fixed inset-x-4 top-1/2 -translate-y-1/2 z-50 mx-auto max-w-md max-h-[85dvh] overflow-y-auto overflow-x-hidden rounded-3xl p-6"
             style={{
               background: 'linear-gradient(180deg, #ffffff, #fff5f6)',
               boxShadow: '0 20px 60px rgba(225, 29, 72, 0.15), 0 4px 16px rgba(0,0,0,0.08)',

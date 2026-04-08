@@ -17,8 +17,9 @@ function SettingsButton() {
   return (
     <motion.button
       id="btn-settings"
-      className="fixed top-4 right-4 z-30 w-11 h-11 flex items-center justify-center rounded-full cursor-pointer border-none"
+      className="fixed right-4 z-30 w-11 h-11 flex items-center justify-center rounded-full cursor-pointer border-none"
       style={{
+        top: 'max(1rem, env(safe-area-inset-top, 1rem))',
         background: 'linear-gradient(135deg, rgba(255,255,255,0.85), rgba(255,241,242,0.9))',
         boxShadow: '0 2px 12px rgba(225, 29, 72, 0.12), 0 1px 3px rgba(0,0,0,0.06)',
         backdropFilter: 'blur(8px)',
