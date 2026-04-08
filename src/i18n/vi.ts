@@ -45,6 +45,10 @@ const vi = {
     complete: 'Hoàn thành!',
     timeLeft: 'Còn {{seconds}}s',
     tryAgain: 'Về trả lời lại',
+    successTitle: 'Tuyệt vời!',
+    failTitle: 'Chưa được rồi!',
+    successMessage: 'Bạn đã hoàn thành thử thách và mở khóa quyền lựa chọn!',
+    failMessage: 'Không sao, hãy thử lại hoặc trả lời câu hỏi nhé!',
   },
   settings: {
     title: 'Cài đặt',

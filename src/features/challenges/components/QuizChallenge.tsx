@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
+import { CheckCircle2, XCircle } from 'lucide-react'
 import type { QuizConfig } from '../data/quizData'
 
 interface Props {
@@ -87,18 +88,20 @@ export default function QuizChallenge({ config, timeLimit, onComplete }: Props) 
           return (
             <motion.button
               key={idx}
-              className={`w-full px-4 py-3 rounded-xl text-left font-medium cursor-pointer transition-colors ${bgClass}`}
+              className={`w-full px-4 py-3 rounded-xl text-left font-medium cursor-pointer transition-colors flex items-center justify-between ${bgClass}`}
               whileHover={!showResult ? { scale: 1.02, x: 4 } : undefined}
               whileTap={!showResult ? { scale: 0.98 } : undefined}
               onClick={() => handleSelect(idx)}
               disabled={showResult}
             >
-              <span className="mr-2 font-bold text-rose-400">
-                {String.fromCharCode(65 + idx)}.
-              </span>
-              {optText}
-              {showResult && isCorrect && ' ✅'}
-              {showResult && isSelected && !isCorrect && ' ❌'}
+              <div>
+                <span className="mr-2 font-bold text-rose-400">
+                  {String.fromCharCode(65 + idx)}.
+                </span>
+                {optText}
+              </div>
+              {showResult && isCorrect && <CheckCircle2 className="text-green-600" size={20} strokeWidth={2} />}
+              {showResult && isSelected && !isCorrect && <XCircle className="text-red-500" size={20} strokeWidth={2} />}
             </motion.button>
           )
         })}

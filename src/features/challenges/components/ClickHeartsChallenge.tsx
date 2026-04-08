@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { Heart, Timer } from 'lucide-react'
 
 interface Props {
   targetCount: number
@@ -7,18 +8,18 @@ interface Props {
   onComplete: (success: boolean) => void
 }
 
-interface Heart {
+interface FloatingHeart {
   id: number
   x: number
   y: number
   size: number
-  emoji: string
+  colorClass: string
 }
 
-const EMOJIS = ['💕', '💖', '💗', '💝', '❤️', '🌹']
+const COLORS = ['text-rose-500', 'text-pink-500', 'text-fuchsia-500', 'text-red-500', 'text-rose-400']
 
 export default function ClickHeartsChallenge({ targetCount, timeLimit, onComplete }: Props) {
-  const [hearts, setHearts] = useState<Heart[]>([])
+  const [hearts, setHearts] = useState<FloatingHeart[]>([])
   const [clicked, setClicked] = useState(0)
   const [timeLeft, setTimeLeft] = useState(timeLimit)
   const nextId = useRef(0)
@@ -27,12 +28,12 @@ export default function ClickHeartsChallenge({ targetCount, timeLimit, onComplet
   // Spawn hearts periodically
   useEffect(() => {
     const spawnHeart = () => {
-      const heart: Heart = {
+      const heart: FloatingHeart = {
         id: nextId.current++,
         x: 10 + Math.random() * 75,
         y: 10 + Math.random() * 65,
-        size: 28 + Math.random() * 20,
-        emoji: EMOJIS[Math.floor(Math.random() * EMOJIS.length)],
+        size: 32 + Math.random() * 24,
+        colorClass: COLORS[Math.floor(Math.random() * COLORS.length)],
       }
       setHearts((prev) => [...prev.slice(-12), heart])
     }
@@ -80,11 +81,15 @@ export default function ClickHeartsChallenge({ targetCount, timeLimit, onComplet
   return (
     <div className="w-full max-w-md mx-auto">
       {/* Progress */}
-      <div className="flex justify-between items-center mb-4">
-        <span className="text-rose-700 font-bold text-lg">
-          {clicked}/{targetCount} 💕
-        </span>
-        <span className="text-rose-500 font-medium">{timeLeft}s ⏱️</span>
+      <div className="flex justify-between items-center mb-4 px-1">
+        <div className="flex items-center gap-1.5 text-rose-700 font-bold text-lg">
+          <Heart size={20} className="text-rose-500" fill="currentColor" strokeWidth={0} />
+          <span>{clicked}/{targetCount}</span>
+        </div>
+        <div className="flex items-center gap-1.5 text-rose-500 font-medium bg-white px-3 py-1 rounded-full shadow-sm">
+          <Timer size={16} />
+          <span>{timeLeft}s</span>
+        </div>
       </div>
 
       {/* Timer bar */}
@@ -118,7 +123,7 @@ export default function ClickHeartsChallenge({ targetCount, timeLimit, onComplet
               onClick={() => handleClick(heart.id)}
               aria-label="Click heart"
             >
-              {heart.emoji}
+              <Heart size={heart.size} className={heart.colorClass} fill="currentColor" strokeWidth={0} />
             </motion.button>
           ))}
         </AnimatePresence>

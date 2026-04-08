@@ -45,6 +45,10 @@ const en = {
     complete: 'Complete!',
     timeLeft: '{{seconds}}s left',
     tryAgain: 'Go back & answer',
+    successTitle: 'Great job!',
+    failTitle: 'Nice try!',
+    successMessage: 'You unlocked the chance to answer the question again!',
+    failMessage: 'No worries, head back and try answering anyway!',
   },
   settings: {
     title: 'Settings',

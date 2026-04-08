@@ -1,7 +1,7 @@
 import { useState, useCallback, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
-import { SkipForward, ArrowLeft } from 'lucide-react'
+import { SkipForward, ArrowLeft, PartyPopper, RefreshCcw } from 'lucide-react'
 import { useAppStore } from '../../store/useAppStore'
 import { createChallengeEngine } from './engine'
 import type { ChallengeDefinition } from '../../types'
@@ -192,21 +192,21 @@ export default function ChallengeScreen() {
             animate={{ opacity: 1, scale: 1 }}
           >
             <motion.div
-              className="text-7xl mb-4"
-              animate={{ scale: [1, 1.2, 1] }}
-              transition={{ duration: 0.5 }}
+              className="text-7xl mb-4 flex justify-center text-rose-500"
+              animate={{ scale: [1, 1.15, 1] }}
+              transition={{ duration: 0.6, type: 'spring' }}
             >
-              {lastSuccess ? '🎉' : '😅'}
+              {lastSuccess ? <PartyPopper size={72} strokeWidth={1.5} /> : <RefreshCcw size={72} strokeWidth={1.5} />}
             </motion.div>
 
             <h3 className="text-2xl font-bold text-rose-800 mb-2">
-              {lastSuccess ? (isEn ? 'Great job!' : 'Giỏi lắm!') : (isEn ? 'Nice try!' : 'Cố lên!')}
+              {lastSuccess ? t('challenge.successTitle', 'Khá lắm!') : t('challenge.failTitle', 'Chưa được rồi!')}
             </h3>
 
             <p className="text-rose-600 mb-8">
               {lastSuccess
-                ? (isEn ? 'Now go back and answer the question!' : 'Giờ quay lại trả lời câu hỏi nha!')
-                : (isEn ? 'Back to the question anyway!' : 'Quay lại câu hỏi thôi!')}
+                ? t('challenge.successMessage', 'Bạn đã mở khóa cơ hội trả lời lại câu hỏi!')
+                : t('challenge.failMessage', 'Không sao, hãy quay lại và thử lại nhé!')}
             </p>
 
             <motion.button
