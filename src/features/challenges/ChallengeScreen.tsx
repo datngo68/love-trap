@@ -1,6 +1,7 @@
 import { useState, useCallback, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
+import { SkipForward, ArrowLeft } from 'lucide-react'
 import { useAppStore } from '../../store/useAppStore'
 import { createChallengeEngine } from './engine'
 import type { ChallengeDefinition } from '../../types'
@@ -153,12 +154,13 @@ export default function ChallengeScreen() {
           </motion.h2>
 
           <motion.button
-            className="px-4 py-1.5 text-sm font-medium text-rose-400 bg-rose-50 rounded-lg cursor-pointer border border-rose-200"
+            className="px-4 py-1.5 text-sm font-medium text-rose-400 bg-rose-50 rounded-lg cursor-pointer border border-rose-200 flex items-center gap-1.5"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={handleSkip}
           >
-            {t('challenge.skip')} ⏭️
+            {t('challenge.skip')}
+            <SkipForward size={14} strokeWidth={2.5} />
           </motion.button>
         </div>
 
@@ -208,7 +210,7 @@ export default function ChallengeScreen() {
             </p>
 
             <motion.button
-              className="px-8 py-4 text-lg font-bold text-white rounded-2xl cursor-pointer"
+              className="px-8 py-4 text-lg font-bold text-white rounded-2xl cursor-pointer border-none flex items-center justify-center gap-2"
               style={{
                 background: 'linear-gradient(135deg, #e11d48, #f43f5e)',
                 boxShadow: '0 4px 20px rgba(225, 29, 72, 0.3)',
@@ -217,7 +219,8 @@ export default function ChallengeScreen() {
               whileTap={{ scale: 0.95 }}
               onClick={handleContinue}
             >
-              {t('challenge.tryAgain')} 💪
+              <ArrowLeft size={18} strokeWidth={2.5} />
+              {t('challenge.tryAgain')}
             </motion.button>
           </motion.div>
         )}

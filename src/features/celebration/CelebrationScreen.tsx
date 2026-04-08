@@ -1,6 +1,7 @@
 import { useEffect, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
+import { Share2, RotateCcw } from 'lucide-react'
 import confetti from 'canvas-confetti'
 import { useAppStore } from '../../store/useAppStore'
 import { encodeConfigToURL } from '../../utils/urlConfig'
@@ -165,26 +166,28 @@ export default function CelebrationScreen() {
         >
           <motion.button
             id="btn-share"
-            className="px-8 py-3 text-lg font-bold text-white rounded-full cursor-pointer"
+            className="px-8 py-3.5 text-lg font-bold text-white rounded-full cursor-pointer border-none flex items-center justify-center gap-2"
             style={{
               background: 'linear-gradient(135deg, #e11d48, #f43f5e)',
               boxShadow: '0 4px 20px rgba(225, 29, 72, 0.3)',
             }}
-            whileHover={{ scale: 1.05 }}
+            whileHover={{ scale: 1.05, boxShadow: '0 8px 32px rgba(225, 29, 72, 0.4)' }}
             whileTap={{ scale: 0.95 }}
             onClick={handleShare}
           >
-            {t('celebration.share')} 📤
+            <Share2 size={18} strokeWidth={2.5} />
+            {t('celebration.share')}
           </motion.button>
 
           <motion.button
             id="btn-play-again"
-            className="px-8 py-3 text-lg font-medium text-rose-600 bg-white border-2 border-rose-200 rounded-full cursor-pointer"
+            className="px-8 py-3.5 text-lg font-medium text-rose-600 bg-white border-2 border-rose-200 rounded-full cursor-pointer flex items-center justify-center gap-2"
             whileHover={{ scale: 1.05, backgroundColor: '#fff1f2' }}
             whileTap={{ scale: 0.95 }}
             onClick={resetSession}
           >
-            {t('celebration.playAgain')} 🔄
+            <RotateCcw size={18} strokeWidth={2.5} />
+            {t('celebration.playAgain')}
           </motion.button>
         </motion.div>
       </motion.div>
