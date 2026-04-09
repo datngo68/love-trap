@@ -1,3 +1,5 @@
+import { challengeRegistry } from '../../challenges/registry'
+
 export interface JourneyStepDef {
   id: string
   stepNumber: 1 | 2 | 3
@@ -6,27 +8,31 @@ export interface JourneyStepDef {
   unlockMessageKey: string
 }
 
-/** The 3 fixed journey steps — mapped to Challenge Registry IDs */
-export const journeySteps: JourneyStepDef[] = [
-  {
-    id: 'bouquet-builder-1', // C4 — Bouquet Builder (Tier 2)
-    stepNumber: 1,
-    titleKey: 'heartJourney.step1Title',
-    descriptionKey: 'heartJourney.step1Desc',
-    unlockMessageKey: 'heartJourney.unlockStep1',
-  },
-  {
-    id: 'mad-libs-1', // C1 — Mad Libs (Tier 1)
-    stepNumber: 2,
-    titleKey: 'heartJourney.step2Title',
-    descriptionKey: 'heartJourney.step2Desc',
-    unlockMessageKey: 'heartJourney.unlockStep2',
-  },
-  {
-    id: 'draw-heart-1', // C2 — Draw Heart (Wow Tier)
-    stepNumber: 3,
-    titleKey: 'heartJourney.step3Title',
-    descriptionKey: 'heartJourney.step3Desc',
-    unlockMessageKey: 'heartJourney.unlockStep3',
-  },
+// 4 kịch bản cảm xúc khác nhau
+const themedJourneys = [
+  // Combo 1: Lãng mạn (Romantic)
+  ['bouquet-builder-1', 'mad-libs-1', 'draw-heart-1'],
+  // Combo 2: Thử thách (Action/Reflex)
+  ['catch-hearts-1', 'rhythm-tap-1', 'heart-shooter-1'],
+  // Combo 3: Kỷ niệm (Memory & Truth)
+  ['quiz-1', 'truth-dare-1', 'memory-lane-1'],
+  // Combo 4: Vui nhộn (Fun)
+  ['tap-counter-1', 'memory-cards-1', 'click-hearts-1'],
 ]
+
+export function getRandomJourney(): JourneyStepDef[] {
+  // Chọn ngẫu nhiên 1 kịch bản
+  const randomCombo = themedJourneys[Math.floor(Math.random() * themedJourneys.length)]
+  
+  return randomCombo.map((challengeId, idx) => {
+    // Lấy tên/mô tả gốc của game làm thông tin step
+    const challenge = challengeRegistry.get(challengeId)
+    return {
+      id: challengeId,
+      stepNumber: (idx + 1) as 1 | 2 | 3,
+      titleKey: challenge?.titleKey || 'heartJourney.step1Title',
+      descriptionKey: challenge?.descriptionKey || 'heartJourney.step1Desc',
+      unlockMessageKey: `heartJourney.unlockStep${idx + 1}`, // Giữ nguyên thông báo mở khóa
+    }
+  })
+}
