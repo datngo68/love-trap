@@ -1,12 +1,8 @@
 import { useMemo } from 'react'
 import { motion } from 'framer-motion'
-import { useTranslation } from 'react-i18next'
+import { challengeRegistry } from '../challenges/registry'
+import ChallengeDispatcher from '../challenges/components/ChallengeDispatcher'
 import type { JourneyStepDef } from './data/journeyData'
-import { buildJourneyConfig } from './data/journeyData'
-import TapCounterChallenge from '../challenges/components/TapCounterChallenge'
-import QuizChallenge from '../challenges/components/QuizChallenge'
-import TypeLoveChallenge from '../challenges/components/TypeLoveChallenge'
-import type { QuizConfig } from '../challenges/data/quizData'
 
 interface Props {
   stepDef: JourneyStepDef
@@ -16,55 +12,11 @@ interface Props {
 }
 
 export default function JourneyStep({ stepDef, senderName, receiverName, onComplete }: Props) {
-  const { i18n } = useTranslation()
-  const isEn = i18n.language === 'en'
+  const challenge = useMemo(() => challengeRegistry.get(stepDef.id), [stepDef.id])
 
-  const config = useMemo(
-    () => buildJourneyConfig(stepDef.id, senderName, receiverName),
-    [stepDef.id, senderName, receiverName],
-  )
-
-  const renderChallenge = () => {
-    switch (stepDef.id) {
-      case 'journey-tap-hearts': {
-        const c = config as { targetTaps: number; timeLimitSeconds: number }
-        return (
-          <TapCounterChallenge
-            targetTaps={c.targetTaps}
-            timeLimit={c.timeLimitSeconds}
-            onComplete={onComplete}
-          />
-        )
-      }
-
-      case 'journey-quiz-love': {
-        return (
-          <QuizChallenge
-            config={config as unknown as QuizConfig}
-            timeLimit={(config as { timeLimitSeconds: number }).timeLimitSeconds}
-            onComplete={onComplete}
-          />
-        )
-      }
-
-      case 'journey-type-love': {
-        const c = config as { phrase: string; phraseEn: string; timeLimitSeconds: number }
-        return (
-          <TypeLoveChallenge
-            phrase={c.phrase}
-            phraseEn={c.phraseEn}
-            timeLimit={c.timeLimitSeconds}
-            onComplete={onComplete}
-          />
-        )
-      }
-
-      default:
-        return null
-    }
+  if (!challenge) {
+    return <div className="text-center p-4 text-slate-500">Challenge {stepDef.id} not found in registry.</div>
   }
-
-  void isEn // used by children via context
 
   return (
     <motion.div
@@ -76,7 +28,12 @@ export default function JourneyStep({ stepDef, senderName, receiverName, onCompl
       transition={{ type: 'spring', stiffness: 280, damping: 26 }}
     >
       <div className="bg-white/70 backdrop-blur-2xl border border-white/60 shadow-[0_8px_40px_rgba(0,0,0,0.06)] rounded-3xl p-6">
-        {renderChallenge()}
+        <ChallengeDispatcher
+          challenge={challenge}
+          senderName={senderName}
+          receiverName={receiverName}
+          onComplete={onComplete}
+        />
       </div>
     </motion.div>
   )
